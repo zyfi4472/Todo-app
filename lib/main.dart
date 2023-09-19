@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/firebase_options.dart';
 import 'package:todoey_app/screens/login/login_screen.dart';
-import 'package:todoey_app/screens/tasks_screen.dart';
+import 'package:todoey_app/screens/index/app_index_screen.dart';
 
 import 'models/task_data.dart';
 import 'navigation/navigation_page_view.dart';
@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // While checking admin status, show a loading indicator
-          return const CircularProgressIndicator
-              .adaptive(); // You can replace this with any loading widget you prefer
+          return const Center(child: CircularProgressIndicator());
+          // You can replace this with any loading widget you prefer
         } else {
           // Check if user is not null and isAdmin is true
           final isAdmin = user != null && snapshot.data == true;
@@ -51,8 +51,8 @@ class MyApp extends StatelessWidget {
               // if isAdmin is false, show the TasksScreen
               return ChangeNotifierProvider(
                 create: (context) => TaskData(),
-                child: MaterialApp(
-                  home: TasksScreen(),
+                child: const MaterialApp(
+                  home: AppIndexScreen(),
                 ),
               );
             }

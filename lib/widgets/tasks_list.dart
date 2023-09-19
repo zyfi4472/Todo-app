@@ -9,21 +9,38 @@ class TasksList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TaskData>(
       builder: (context, taskData, child) {
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            final task = taskData.tasks[index];
-            return TaskTile(
-              taskTitle: task.name,
-              isChecked: task.isDone,
-              checkboxCallback: (checkboxState) {
-                taskData.updateTask(task);
-              },
-              longPressCallback: () {
-                taskData.deleteTask(task);
-              },
-            );
-          },
-          itemCount: taskData.taskCount,
+        return Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(
+              height: 50,
+            ),
+            const Text(
+              'My Tasks',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  final task = taskData.tasks[index];
+                  return TaskTile(
+                    taskTitle: task.name,
+                    isChecked: task.isDone,
+                    checkboxCallback: (checkboxState) {
+                      taskData.updateTask(task);
+                    },
+                    longPressCallback: () {
+                      taskData.deleteTask(task);
+                    },
+                  );
+                },
+                itemCount: taskData.taskCount,
+              ),
+            ),
+          ],
         );
       },
     );

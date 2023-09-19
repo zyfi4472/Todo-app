@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoey_app/navigation/bottom_nav.dart';
-import 'package:todoey_app/screens/tasks_screen.dart';
+import 'package:todoey_app/screens/index/app_index_screen.dart';
 import 'package:todoey_app/screens/users/users.dart';
 
 import '../screens/createUser/create_user.dart';
@@ -38,7 +38,7 @@ class _MyPageViewState extends State<MyPageView> {
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: [
-          TasksScreen(),
+          AppIndexScreen(),
           UserListScreen(),
           const CreateUserScreen(),
         ],

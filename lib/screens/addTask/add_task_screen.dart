@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../models/task_data.dart';
+class AddTaskScreen extends StatefulWidget {
+  final DocumentReference? userReference;
+  const AddTaskScreen({super.key, this.userReference});
+  @override
+  State<AddTaskScreen> createState() => _AddTaskScreenState();
+}
 
-class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen({super.key});
-
+class _AddTaskScreenState extends State<AddTaskScreen> {
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -45,26 +47,18 @@ class AddTaskScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                // Check if the user is authenticated
-                if (user != null) {
-                  // Reference to the user's tasks sub-collection
-                  final userDocRef = FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(user!.uid);
-
-                  // Update the user's document with the new task
-                  await userDocRef.update({
+                if (widget.userReference != null) {
+                  // Add the new task to the user's document
+                  print('user ref not null');
+                  await widget.userReference!.update({
                     'tasks': FieldValue.arrayUnion([
                       {
                         'title': newTaskTitle,
-                      }
-                    ])
+                      },
+                    ]),
                   });
 
-                  // Notify the local task list (Provider)
-                  Provider.of<TaskData>(context, listen: false)
-                      .fetchTasksFromFirestore();
-
+                  // Navigate back to the UserListScreen
                   Navigator.pop(context);
                 }
               },

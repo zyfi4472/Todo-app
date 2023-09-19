@@ -8,11 +8,6 @@ import 'package:todoey_app/models/task.dart';
 class TaskData extends ChangeNotifier {
   List<Task> _tasks = [];
 
-  TaskData() {
-    // Fetch tasks from Firestore when TaskData is created
-    fetchTasksFromFirestore();
-  }
-
   UnmodifiableListView<Task> get tasks {
     return UnmodifiableListView(_tasks);
   }
@@ -37,7 +32,14 @@ class TaskData extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Method to clear all tasks
+  void clearTasks() {
+    _tasks.clear();
+    notifyListeners();
+  }
+
   Future<void> fetchTasksFromFirestore() async {
+    print('Fetching Tasks');
     try {
       final user = FirebaseAuth.instance.currentUser;
 
@@ -60,6 +62,7 @@ class TaskData extends ChangeNotifier {
           }
         }
       }
+      print('Tasks Fetched');
     } catch (e) {
       print("Error fetching data: $e");
     }

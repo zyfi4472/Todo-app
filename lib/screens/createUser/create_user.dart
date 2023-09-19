@@ -16,48 +16,6 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   String? email, password, name;
   bool showSpiner = false;
 
-  void createUser() async {
-    if (email?.isEmpty != false ||
-        password?.isEmpty != false ||
-        name?.isEmpty != false) {
-      setState(() {
-        showSpiner = false;
-      });
-      showFlutterToast("Please fill in all fields");
-    } else {
-      // print('all fields are provided');
-
-      try {
-        final auth = Authentication();
-        final newUser = await auth.CreateUser(email!, password!, name!);
-
-        // ignore: unnecessary_null_comparison
-        if (newUser != null) {
-          // ignore: use_build_context_synchronously
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-          // print('SignUp successful');
-        } else {
-          // Handle the case where newUser is null
-          showFlutterToast("Sign-up failed. Please try again.");
-        }
-      } catch (error) {
-        // Sign-Up failed, handle the error here.
-        showFlutterToast("Sign-up failed. $error");
-      }
-
-      setState(() {
-        showSpiner = false;
-        email = null;
-        password = null;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,11 +73,52 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   child: const Text('Create'),
                 ),
               ),
-
             ],
           ),
         ),
       ),
     );
+  }
+
+  void createUser() async {
+    if (email?.isEmpty != false ||
+        password?.isEmpty != false ||
+        name?.isEmpty != false) {
+      setState(() {
+        showSpiner = false;
+      });
+      showFlutterToast("Please fill in all fields");
+    } else {
+      // print('all fields are provided');
+
+      try {
+        final auth = Authentication();
+        final newUser = await auth.CreateUser(email!, password!, name!);
+
+        // ignore: unnecessary_null_comparison
+        if (newUser != null) {
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
+          // print('SignUp successful');
+        } else {
+          // Handle the case where newUser is null
+          showFlutterToast("Sign-up failed. Please try again.");
+        }
+      } catch (error) {
+        // Sign-Up failed, handle the error here.
+        showFlutterToast("Sign-up failed. $error");
+      }
+
+      setState(() {
+        showSpiner = false;
+        email = null;
+        password = null;
+      });
+    }
   }
 }
