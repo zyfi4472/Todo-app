@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/firebase_options.dart';
 import 'package:todoey_app/screens/login/login_screen.dart';
-import 'package:todoey_app/screens/index/app_index_screen.dart';
 
 import 'models/task_data.dart';
 import 'navigation/navigation_page_view.dart';
@@ -39,30 +39,34 @@ class MyApp extends StatelessWidget {
           final isAdmin = user != null && snapshot.data == true;
 
           if (user != null) {
-            if (isAdmin == true) {
-              // if isAdmin is true, show the MyPageView
-              return ChangeNotifierProvider(
-                create: (context) => TaskData(),
-                child: const MaterialApp(
-                  home: MyPageView(),
-                ),
-              );
-            } else if (isAdmin == false) {
-              // if isAdmin is false, show the TasksScreen
-              return ChangeNotifierProvider(
-                create: (context) => TaskData(),
-                child: const MaterialApp(
-                  home: AppIndexScreen(),
-                ),
-              );
-            }
+            // if isAdmin is true, show the MyPageView
+            return ScreenUtilInit(
+              designSize: const Size(360, 690),
+              minTextAdapt: true,
+              splitScreenMode: true,
+              builder: (_, child) {
+                return ChangeNotifierProvider(
+                  create: (context) => TaskData(),
+                  child: MaterialApp(
+                    home: MyPageView(isAdmin: isAdmin),
+                  ),
+                );
+              },
+            );
           }
           // Default return when no condition matches
-          return ChangeNotifierProvider(
-            create: (context) => TaskData(),
-            child: const MaterialApp(
-              home: LoginScreen(),
-            ),
+          return ScreenUtilInit(
+            designSize: const Size(360, 690),
+            minTextAdapt: true,
+            splitScreenMode: true,
+            builder: (_, child) {
+              return ChangeNotifierProvider(
+                create: (context) => TaskData(),
+                child: const MaterialApp(
+                  home: LoginScreen(),
+                ),
+              );
+            },
           );
         }
       },

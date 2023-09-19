@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final DocumentReference? userReference;
@@ -20,21 +21,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       color: const Color(0xff757575),
       child: Container(
         padding: const EdgeInsets.all(20.0),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0),
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.0.r),
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Text(
+            Text(
               'Add Task',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 30.0,
+                fontSize: 30.0.sp,
                 color: Colors.lightBlueAccent,
               ),
             ),

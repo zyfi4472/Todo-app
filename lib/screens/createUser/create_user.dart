@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/reuseableComponents/email_field_widget.dart';
@@ -26,15 +27,15 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
+              Text(
                 'Create new user',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextFormField(
@@ -50,22 +51,22 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               EmailTextField(
                 onChanged: (newValue) {
                   email = newValue;
                 },
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               PasswordTextField(
                 onChanged: (newValue) {
                   password = newValue;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               SizedBox(
-                width: 200,
-                height: 50,
+                width: 200.w,
+                height: 50.h,
                 child: ElevatedButton(
                   onPressed: () {
                     createUser();
@@ -92,7 +93,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       // print('all fields are provided');
 
       try {
-        final auth = Authentication();
+        final auth = FirebaseAuthentication();
         final newUser = await auth.CreateUser(email!, password!, name!);
 
         // ignore: unnecessary_null_comparison

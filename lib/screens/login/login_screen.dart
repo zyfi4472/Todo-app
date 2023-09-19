@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
 import 'package:todoey_app/reuseableComponents/email_field_widget.dart';
@@ -30,36 +32,36 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
+              Text(
                 'Todo App',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20),
-              const Text(
+              SizedBox(height: 20.h),
+              Text(
                 'Login',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               EmailTextField(
                 onChanged: (newValue) {
                   email = newValue;
                 },
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               PasswordTextField(
                 onChanged: (newValue) {
                   password = newValue;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               ElevatedButton(
                 onPressed: () {
                   // Add login logic here
@@ -67,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 child: const Text('Login'),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
             ],
           ),
         ),
@@ -86,21 +88,18 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       showFlutterToast("Please fill in both email and password fields");
     } else {
-      // print('email and pass provided');
-
-      final auth = Authentication();
+      final auth = FirebaseAuthentication();
       final user = await auth.signIn(email!, password!);
 
       if (user != null) {
         // Sign-in was successful
+        final isAdmin = await checkAdminStatus(user.uid);
+
         // ignore: use_build_context_synchronously
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => const MyPageView(),
-          ),
+          MaterialPageRoute(builder: (context) => MyPageView(isAdmin: isAdmin)),
         );
-        // print('Login successful');
       } else {
         // Handle sign-in failure
         showFlutterToast("Login unsuccessful. Please try again.");
@@ -111,6 +110,24 @@ class _LoginScreenState extends State<LoginScreen> {
         email = null;
         password = null;
       });
+    }
+  }
+
+  Future<bool> checkAdminStatus(String userId) async {
+    try {
+      final userDocRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+      final userData = await userDocRef.get();
+
+      if (userData.exists) {
+        final isAdmin = userData.data()?['isAdmin'] ?? false;
+        return isAdmin;
+      } else {
+        return false; // User document not found
+      }
+    } catch (e) {
+      print("Error checking admin status: $e");
+      return false;
     }
   }
 }

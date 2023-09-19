@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoey_app/widgets/custom_dialogue.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../userDetails/user_details_screen.dart';
 
 class UserListScreen extends StatelessWidget {
   const UserListScreen({super.key});
@@ -9,51 +10,46 @@ class UserListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User List'),
+        title: const Center(child: Text('User List')),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            print('No data loaded');
-            return const CircularProgressIndicator(); // Show a loading indicator
+            return const Center(child: CircularProgressIndicator());
           }
-          final users = snapshot.data!.docs; // List of user documents
-          List<Widget> userListWidgets = [];
+          final users = snapshot.data!.docs;
 
-          for (var user in users) {
-            final userData = user.data();
-            final userName =
-                userData['name'] ?? 'Unknown'; // Display the user's name
-            final userEmail = userData['email'] ?? 'Unknown';
+          return ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              final userData = users[index].data();
+              final userName = userData['name'] ?? 'Unknown';
+              final userEmail = userData['email'] ?? 'Unknown';
 
-            userListWidgets.add(
-              GestureDetector(
+              final userReference = users[index].reference;
+
+              return GestureDetector(
                 onTap: () {
-                  // Pass the user reference to the UserOptionsDialog
-                  final userReference = user.reference;
-                  showDialog(
-                    context: context,
-                    builder: (context) => UserOptionsDialog(
-                      userReference: userReference,
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          UserDetailsScreen(userReference: userReference),
                     ),
                   );
                 },
                 child: ListTile(
-                  title: Text(userName), // Display the user's name here
+                  title: Text(userName),
                   subtitle: Text(userEmail),
-                  trailing: const Icon(
+                  trailing: Icon(
                     Icons.arrow_circle_right,
                     color: Colors.lightBlueAccent,
-                    size: 30,
+                    size: 30.sp,
                   ),
                 ),
-              ),
-            );
-          }
-
-          return ListView(
-            children: userListWidgets,
+              );
+            },
           );
         },
       ),

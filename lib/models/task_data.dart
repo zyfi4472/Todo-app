@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:todoey_app/authetication/authentication.dart';
 import 'dart:collection';
-
 import 'package:todoey_app/models/task.dart';
 
 class TaskData extends ChangeNotifier {
+  final taskAuth = FirebaseAuthentication();
   List<Task> _tasks = [];
 
   UnmodifiableListView<Task> get tasks {
@@ -28,7 +29,9 @@ class TaskData extends ChangeNotifier {
   }
 
   void deleteTask(Task task) {
+    // To delete a task
     _tasks.remove(task);
+    // taskAuth.deleteTaskFromFirestore(task);
     notifyListeners();
   }
 

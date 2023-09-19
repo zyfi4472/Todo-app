@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todoey_app/models/task.dart';
 
-class Authentication {
+class FirebaseAuthentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  // ignore: non_constant_identifier_names
   Future<User?> CreateUser(String email, String password, String name) async {
     try {
       final newUser = await _auth.createUserWithEmailAndPassword(
@@ -19,7 +21,7 @@ class Authentication {
             .set({
           'name': name,
           'email': email,
-          'isAdmin':false,
+          'isAdmin': false,
           // Add other user properties here
         });
 
@@ -46,6 +48,45 @@ class Authentication {
       // Handle sign-in errors
       print('Sign-in error: $error');
       return null;
+    }
+  }
+
+  void deleteTaskFromFirestore(Task task) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        final userDocRef =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+        final userDocSnapshot = await userDocRef.get();
+
+        if (userDocSnapshot.exists) {
+          final tasksData = userDocSnapshot.data() as Map<String, dynamic>;
+          List<dynamic>? tasksList = tasksData['tasks'];
+
+          if (tasksList != null) {
+            // Find the task to delete by comparing the task name
+            final taskToDelete = tasksList.firstWhere(
+              (taskData) => taskData['title'] == task.name,
+              orElse: () => null,
+            );
+
+            if (taskToDelete != null) {
+              tasksList.remove(taskToDelete);
+
+              // Update the 'tasks' field in Firestore with the modified tasks list
+              await userDocRef.update({'tasks': tasksList});
+
+              // // Notify listeners to update the local task list
+              // _tasks.remove(task);
+              // notifyListeners();
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print("Error deleting task from Firestore: $e");
     }
   }
 }

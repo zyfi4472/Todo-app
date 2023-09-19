@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/widgets/task_tile.dart';
 import '../models/task_data.dart';
@@ -12,13 +13,11 @@ class TasksList extends StatelessWidget {
         return Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(
-              height: 50,
-            ),
-            const Text(
+            SizedBox(height: 50.h),
+            Text(
               'My Tasks',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/screens/login/login_screen.dart';
 import '../../models/task_data.dart';
@@ -48,12 +49,12 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                     children: <Widget>[
                       Row(
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             backgroundColor: Colors.white,
-                            radius: 30.0,
+                            radius: 30.0.r,
                             child: Icon(
                               Icons.list,
-                              size: 30.0,
+                              size: 30.0.r,
                               color: Colors.lightBlueAccent,
                             ),
                           ),
@@ -64,34 +65,32 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                               resetAppState(
                                   context); // Call the reset method when signing out
                             },
-                            child: const CircleAvatar(
+                            child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              radius: 30.0,
+                              radius: 30.0.r,
                               child: Icon(
                                 Icons.logout,
                                 color: Colors.red,
-                                size: 30,
+                                size: 30.r,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      const Text(
+                      SizedBox(height: 10.0.h),
+                      Text(
                         'Todoey',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 50.0,
+                          fontSize: 50.0.sp,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Text(
                         '${Provider.of<TaskData>(context).taskCount} Tasks',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                         ),
                       ),
                     ],
@@ -100,11 +99,11 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
+                        topLeft: Radius.circular(20.0.r),
+                        topRight: Radius.circular(20.0.r),
                       ),
                     ),
                     child: const TasksList(),

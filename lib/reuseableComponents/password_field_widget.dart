@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PasswordTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
-  PasswordTextField({required this.onChanged});
+  const PasswordTextField({super.key, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
