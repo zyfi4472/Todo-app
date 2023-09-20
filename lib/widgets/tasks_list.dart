@@ -13,7 +13,7 @@ class TasksList extends StatelessWidget {
         return Column(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 50.h),
+            SizedBox(height: 15.h),
             Text(
               'My Tasks',
               style: TextStyle(
@@ -27,6 +27,9 @@ class TasksList extends StatelessWidget {
                   final task = taskData.tasks[index];
                   return TaskTile(
                     taskTitle: task.name,
+                    taskDescription: task.description,
+                    taskDeadline: task.deadline,
+                    taskPriority: task.priority,
                     isChecked: task.isDone,
                     checkboxCallback: (checkboxState) {
                       taskData.updateTask(task);

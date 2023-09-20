@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:todoey_app/screens/addTask/add_task_screen.dart';
+
+import '../addTask/add_task_screen.dart';
 
 class UserDetailsScreen extends StatelessWidget {
   final DocumentReference userReference;
@@ -57,7 +58,7 @@ class UserDetailsScreen extends StatelessWidget {
           }
 
           final userData = snapshot.data!.data() as Map<String, dynamic>;
-          final tasks = userData['tasks'] as List<dynamic>;
+          final tasks = (userData['tasks'] as List<dynamic>?) ?? [];
           final userName = userData['name'] as String;
 
           if (tasks.isEmpty) {

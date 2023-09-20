@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todoey_app/authetication/authentication.dart';
@@ -126,7 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
         return false; // User document not found
       }
     } catch (e) {
-      print("Error checking admin status: $e");
+      if (kDebugMode) {
+        print("Error checking admin status: $e");
+      }
       return false;
     }
   }

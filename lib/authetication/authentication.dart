@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:todoey_app/models/task.dart';
+import 'package:flutter/foundation.dart';
+import 'package:todoey_app/models/task_model.dart';
 
 class FirebaseAuthentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,7 +47,9 @@ class FirebaseAuthentication {
       return userCredential.user;
     } catch (error) {
       // Handle sign-in errors
-      print('Sign-in error: $error');
+      if (kDebugMode) {
+        print('Sign-in error: $error');
+      }
       return null;
     }
   }
@@ -86,7 +89,9 @@ class FirebaseAuthentication {
         }
       }
     } catch (e) {
-      print("Error deleting task from Firestore: $e");
+      // if (kDebugMode) {
+      //   print("Error deleting task from Firestore: $e");
+      // }
     }
   }
 }

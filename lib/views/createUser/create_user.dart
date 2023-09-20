@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/reuseableComponents/email_field_widget.dart';
 import 'package:todoey_app/reuseableComponents/flutter_toast.dart';
 import 'package:todoey_app/reuseableComponents/password_field_widget.dart';
-import 'package:todoey_app/screens/login/login_screen.dart';
+
+import '../login/login_screen.dart';
 
 class CreateUserScreen extends StatefulWidget {
   const CreateUserScreen({super.key});
@@ -90,35 +92,27 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       });
       showFlutterToast("Please fill in all fields");
     } else {
-      // print('all fields are provided');
-
       try {
         final auth = FirebaseAuthentication();
         final newUser = await auth.CreateUser(email!, password!, name!);
 
-        // ignore: unnecessary_null_comparison
         if (newUser != null) {
-          // ignore: use_build_context_synchronously
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-          // print('SignUp successful');
+          showFlutterToast('User created successfully');
         } else {
-          // Handle the case where newUser is null
           showFlutterToast("Sign-up failed. Please try again.");
         }
       } catch (error) {
-        // Sign-Up failed, handle the error here.
         showFlutterToast("Sign-up failed. $error");
       }
 
+      // Delay the reset of email and password to null
+      await Future.delayed(
+          const Duration(milliseconds: 200)); // Adjust the delay time as needed
+
       setState(() {
-        showSpiner = false;
         email = null;
         password = null;
+        showSpiner = false;
       });
     }
   }

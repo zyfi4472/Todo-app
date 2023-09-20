@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:todoey_app/screens/login/login_screen.dart';
 import '../../models/task_data.dart';
 import '../../widgets/tasks_list.dart';
+import '../login/login_screen.dart';
 
 // ignore: must_be_immutable
 class AppIndexScreen extends StatefulWidget {
@@ -61,7 +62,9 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                           const Spacer(),
                           GestureDetector(
                             onTap: () {
-                              print('signout clicked');
+                              if (kDebugMode) {
+                                print('signout clicked');
+                              }
                               resetAppState(
                                   context); // Call the reset method when signing out
                             },
@@ -124,6 +127,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
 
   // Method to reset the app's state
   void resetAppState(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final FirebaseAuth _auth = FirebaseAuth.instance;
     // Clear any app-specific data or state here
     Provider.of<TaskData>(context, listen: false).clearTasks();

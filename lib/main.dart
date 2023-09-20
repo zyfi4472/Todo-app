@@ -5,25 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/firebase_options.dart';
-import 'package:todoey_app/screens/login/login_screen.dart';
-
-import 'models/task_data.dart';
-import 'navigation/navigation_page_view.dart';
+import 'package:todoey_app/models/task_data.dart';
+import 'package:todoey_app/navigation/navigation_page_view.dart';
+import 'package:todoey_app/views/login/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MyApp());
 }
 
-// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
+  // Get the current user
   final user = FirebaseAuth.instance.currentUser;
-  bool showSpiner = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +32,12 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // While checking admin status, show a loading indicator
           return const Center(child: CircularProgressIndicator());
-          // You can replace this with any loading widget you prefer
         } else {
           // Check if user is not null and isAdmin is true
           final isAdmin = user != null && snapshot.data == true;
 
           if (user != null) {
-            // if isAdmin is true, show the MyPageView
+            // If isAdmin is true, show the MyPageView
             return ScreenUtilInit(
               designSize: const Size(360, 690),
               minTextAdapt: true,
@@ -72,8 +70,6 @@ class MyApp extends StatelessWidget {
       },
     );
   }
-
-  // Your checkAdminStatus method remains unchanged
 
   Future<bool> checkAdminStatus() async {
     // Reference to the user's document in Firestore
