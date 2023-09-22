@@ -28,61 +28,70 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Task Title
-        Text(
-          'Title:',
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
-          ),
+    return Card(
+      elevation: 7,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.r),
         ),
-        Row(
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Task Title
             Text(
-              taskTitle,
+              'Title:',
               style: TextStyle(
-                fontSize: 14.sp,
-                decoration: isChecked ? TextDecoration.lineThrough : null,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const Spacer(),
-            Checkbox(
-              activeColor: Colors.lightBlueAccent,
-              value: isChecked,
-              onChanged: checkboxCallback,
+            Row(
+              children: [
+                Text(
+                  taskTitle,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    decoration: isChecked ? TextDecoration.lineThrough : null,
+                  ),
+                ),
+                const Spacer(),
+                Checkbox(
+                  activeColor: Colors.lightBlueAccent,
+                  value: isChecked,
+                  onChanged: checkboxCallback,
+                ),
+              ],
+            ),
+            SizedBox(height: 5.h),
+
+            // Task Description
+            TaskDetailItem(
+              heading: 'Description:',
+              text: taskDescription,
+              isChecked: isChecked,
+            ),
+            SizedBox(height: 10.h),
+
+            // Task Priority
+            TaskDetailItem(
+              heading: 'Priority:',
+              text: taskPriority,
+              isChecked: isChecked,
+            ),
+            SizedBox(height: 10.h),
+
+            // Task Priority
+            TaskDetailItem(
+              heading: 'Deadline:',
+              text: taskDeadline,
+              isChecked: isChecked,
             ),
           ],
         ),
-        SizedBox(height: 5.h),
-
-        // Task Description
-        TaskDetailItem(
-          heading: 'Description:',
-          text: taskDescription,
-          isChecked: isChecked,
-        ),
-        SizedBox(height: 10.h),
-
-        // Task Priority
-        TaskDetailItem(
-          heading: 'Priority:',
-          text: taskPriority,
-          isChecked: isChecked,
-        ),
-        SizedBox(height: 10.h),
-
-        // Task Priority
-        TaskDetailItem(
-          heading: 'Deadline:',
-          text: taskDeadline,
-          isChecked: isChecked,
-        ),
-
-        const Divider(thickness: 3, color: Colors.lightBlueAccent)
-      ],
+      ),
     );
 
     // ListTile(

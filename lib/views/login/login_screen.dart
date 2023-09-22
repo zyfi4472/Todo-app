@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
-import 'package:todoey_app/reuseableComponents/email_field_widget.dart';
-import 'package:todoey_app/reuseableComponents/password_field_widget.dart';
+import 'package:todoey_app/reuseableComponents/input_field_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../reuseableComponents/flutter_toast.dart';
@@ -26,19 +25,24 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: const Color(0XFFFFFFFF),
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Image.asset(
+                width: 120,
+                height: 120,
+                'images/todoLogo.png',
+              ),
               Text(
                 'Todo App',
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: const Color(0XFF393349),
                 ),
               ),
               SizedBox(height: 20.h),
@@ -47,28 +51,47 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: const Color(0XFF393349),
                 ),
               ),
               SizedBox(height: 20.h),
-              EmailTextField(
+              InputField(
+                heading: 'Email',
+                labelText: 'user@email.com',
+                icon: const Icon(Icons.email),
                 onChanged: (newValue) {
                   email = newValue;
                 },
               ),
               SizedBox(height: 10.h),
-              PasswordTextField(
+              InputField(
+                icon: const Icon(Icons.lock_outline_rounded),
+                heading: 'Password',
+                labelText: '********',
                 onChanged: (newValue) {
                   password = newValue;
                 },
               ),
               SizedBox(height: 20.h),
-              ElevatedButton(
-                onPressed: () {
-                  // Add login logic here
-                  signIn();
-                },
-                child: const Text('Login'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 40.h,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      signIn();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlueAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the radius as needed
+                      ),
+                    ),
+                    child: const Text('Login'),
+                  ),
+                ),
               ),
               SizedBox(height: 10.h),
             ],

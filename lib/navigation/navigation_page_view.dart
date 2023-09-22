@@ -5,7 +5,6 @@ import '../views/createUser/create_user.dart';
 import '../views/index/app_index_screen.dart';
 import '../views/users/users_screen.dart';
 
-
 class MyPageView extends StatefulWidget {
   final bool isAdmin; // Add this variable to hold the isAdmin status
 

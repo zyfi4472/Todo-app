@@ -1,0 +1,13 @@
+flutter_native_splash:
+
+  # Background color of the splash screen
+  color: "#FFFFFF"
+
+  # Image path or asset name for the logo
+  image: "images/todoLogo.png"
+
+  # Image background color (use the same as the app background)
+  image_background_color: "#FFFFFF"
+
+  # Splash screen animation
+  animation: none

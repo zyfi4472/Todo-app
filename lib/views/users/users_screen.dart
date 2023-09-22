@@ -11,6 +11,8 @@ class UserListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('User List')),
+        automaticallyImplyLeading:
+            false, // to remove the back arrow from appbar
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),
@@ -30,25 +32,32 @@ class UserListScreen extends StatelessWidget {
               final userReference = users[index].reference;
 
               return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          UserDetailsScreen(userReference: userReference),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            UserDetailsScreen(userReference: userReference),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 7,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.r),
+                      ),
                     ),
-                  );
-                },
-                child: ListTile(
-                  title: Text(userName),
-                  subtitle: Text(userEmail),
-                  trailing: Icon(
-                    Icons.arrow_circle_right,
-                    color: Colors.lightBlueAccent,
-                    size: 30.sp,
-                  ),
-                ),
-              );
+                    child: ListTile(
+                      title: Text(userName),
+                      subtitle: Text(userEmail),
+                      trailing: Icon(
+                        Icons.arrow_circle_right,
+                        color: Colors.lightBlueAccent,
+                        size: 30.sp,
+                      ),
+                    ),
+                  ));
             },
           );
         },

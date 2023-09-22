@@ -15,6 +15,8 @@ class UserDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text('User Details')),
+        // automaticallyImplyLeading:
+        //     false, // to remove the back arrow from appbar
         actions: [
           // Add task button in the app bar
           GestureDetector(
@@ -35,9 +37,12 @@ class UserDetailsScreen extends StatelessWidget {
                 ),
               );
             },
-            child: Icon(
-              Icons.add_circle_outline,
-              size: 30.r,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(
+                Icons.add_circle_outline,
+                size: 30.r,
+              ),
             ),
           ),
         ],
@@ -91,19 +96,26 @@ class UserDetailsScreen extends StatelessWidget {
                     final taskTitle = task['title'] ?? 'No Title';
                     final isDone = task['isDone'] ?? false;
 
-                    return ListTile(
-                      title: Text(taskTitle),
-                      trailing: Checkbox(
-                        value: isDone,
-                        onChanged: (newValue) {
-                          // Update the 'isDone' status in the user document's "tasks" array
+                    return Card(
+                        elevation: 7,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.r),
+                          ),
+                        ),
+                        child: ListTile(
+                          title: Text(taskTitle),
+                          trailing: Checkbox(
+                            value: isDone,
+                            onChanged: (newValue) {
+                              // Update the 'isDone' status in the user document's "tasks" array
 
-                          // tasks[index]['isDone'] = newValue;
+                              // tasks[index]['isDone'] = newValue;
 
-                          userReference.update({'tasks': tasks});
-                        },
-                      ),
-                    );
+                              userReference.update({'tasks': tasks});
+                            },
+                          ),
+                        ));
                   },
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:todoey_app/models/task_model.dart';
+import 'package:todoey_app/reuseableComponents/flutter_toast.dart';
 
 class FirebaseAuthentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,6 +34,8 @@ class FirebaseAuthentication {
     } catch (error) {
       // Handle sign-up errors
       // print('Sign-up error: $error');
+      showFlutterToast('Error creating user: $error');
+
 
       return null;
     }
@@ -48,7 +51,7 @@ class FirebaseAuthentication {
     } catch (error) {
       // Handle sign-in errors
       if (kDebugMode) {
-        print('Sign-in error: $error');
+        showFlutterToast('Sign-in error: $error');
       }
       return null;
     }
