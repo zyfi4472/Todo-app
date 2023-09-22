@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:todoey_app/models/task_model.dart';
+import 'package:todoey_app/data/model/task_model.dart';
 import 'package:todoey_app/reuseableComponents/flutter_toast.dart';
 
 class FirebaseAuthentication {
@@ -35,7 +35,6 @@ class FirebaseAuthentication {
       // Handle sign-up errors
       // print('Sign-up error: $error');
       showFlutterToast('Error creating user: $error');
-
 
       return null;
     }

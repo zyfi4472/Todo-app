@@ -3,7 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../models/task_data.dart';
+import 'package:todoey_app/data/repository/tasks_repo.dart';
+import '../../cubit/task_data.dart';
 import '../../widgets/tasks_list.dart';
 import '../login/login_screen.dart';
 
@@ -16,14 +17,18 @@ class AppIndexScreen extends StatefulWidget {
 
 class _AppIndexScreenState extends State<AppIndexScreen> {
   late Future<void> _initializeTaskData;
+  final TaskRepository taskRepository = TaskRepository();
 
   @override
   void initState() {
     super.initState();
 
     // Initialize _initializeTaskData with the async initialization
-    _initializeTaskData =
-        Provider.of<TaskData>(context, listen: false).fetchTasksFromFirestore();
+    // _initializeTaskData =
+    //     Provider.of<TaskData>(context, listen: false).fetchTasksFromFirestore();
+
+    _initializeTaskData = taskRepository.fetchTasks();
+    print('init fetchTasks : $_initializeTaskData');
   }
 
   @override
@@ -50,13 +55,12 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                     children: <Widget>[
                       Row(
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30.0.r,
-                            child: Icon(
-                              Icons.list,
-                              size: 30.0.r,
-                              color: Colors.lightBlueAccent,
+                          Text(
+                            'Todoey',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 50.0.sp,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           const Spacer(),
@@ -70,24 +74,15 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                             },
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
-                              radius: 30.0.r,
+                              radius: 25.0.r,
                               child: Icon(
                                 Icons.logout,
                                 color: Colors.red,
-                                size: 30.r,
+                                size: 25.r,
                               ),
                             ),
                           ),
                         ],
-                      ),
-                      SizedBox(height: 10.0.h),
-                      Text(
-                        'Todoey',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 50.0.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
                       ),
                       Text(
                         '${Provider.of<TaskData>(context).taskCount} Tasks',

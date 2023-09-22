@@ -6,9 +6,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/firebase_options.dart';
-import 'package:todoey_app/models/task_data.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
 import 'package:todoey_app/views/login/login_screen.dart';
+
+import 'cubit/task_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initialization();
+    // initialization();
   }
 
   void initialization() async {

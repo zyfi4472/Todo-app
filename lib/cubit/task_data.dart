@@ -4,7 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'dart:collection';
-import 'package:todoey_app/models/task_model.dart';
+
+import '../data/model/task_model.dart';
 
 class TaskData extends ChangeNotifier {
   final taskAuth = FirebaseAuthentication();
@@ -55,7 +56,7 @@ class TaskData extends ChangeNotifier {
 
       if (user != null) {
         final userDocRef =
-            FirebaseFirestore.instance.collection('users').doc(user.uid);
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
         print('User not null');
 
         final userDocSnapshot = await userDocRef.get();

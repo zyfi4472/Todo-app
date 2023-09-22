@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'task_model.g.dart';
+
+@JsonSerializable()
 class Task {
   final String name;
   final String description;
@@ -15,4 +19,8 @@ class Task {
   void toggleDone() {
     isDone = !isDone;
   }
+
+  factory Task.fomJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+
+  Map<String, dynamic> toJson(Task task) => _$TaskToJson(this);
 }

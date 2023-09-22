@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/widgets/task_tile.dart';
-import '../models/task_data.dart';
+import '../cubit/task_data.dart';
 
 class TasksList extends StatelessWidget {
   const TasksList({Key? key}) : super(key: key);
