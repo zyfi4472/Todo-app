@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:todoey_app/firebase_options.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
 import 'package:todoey_app/views/login/login_screen.dart';
-
 import 'cubit/task_data.dart';
 
 void main() async {

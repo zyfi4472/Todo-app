@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:todoey_app/services/local_auth_service.dart';
 import '../../cubit/task_data.dart';
 import '../../widgets/tasks_list.dart';
 import '../login/login_screen.dart';
@@ -15,7 +16,7 @@ class AppIndexScreen extends StatefulWidget {
 
 class _AppIndexScreenState extends State<AppIndexScreen> {
   late Future<void> _initializeTaskData;
-  TaskData taskData = TaskData();
+  bool authenticated = false;
 
   @override
   void initState() {
@@ -84,6 +85,23 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                           ),
                         ],
                       ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            final authenticate = await LocalAuth.authenticate();
+                            setState(() {
+                              authenticated = authenticate;
+                            });
+                          },
+                          child: const Text('Authenticate')),
+                      if (authenticated) const Text('Local auth successful'),
+                      if (authenticated)
+                        ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                authenticated = false;
+                              });
+                            },
+                            child: const Text('Cancel auth')),
                       SizedBox(height: 10.h),
                       Text(
                         '  You have ${Provider.of<TaskData>(context).taskCount} Tasks',

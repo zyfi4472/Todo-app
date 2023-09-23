@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/data/repository/tasks_repo.dart';
 import 'dart:collection';
-
 import '../data/model/task_model.dart';
 
 class TaskData extends ChangeNotifier {
@@ -21,17 +20,6 @@ class TaskData extends ChangeNotifier {
     return _tasks.length;
   }
 
-  // void addTask(String newTaskTitle) {
-  //   final task = TaskModel(
-  //     name: newTaskTitle,
-  //     deadline: '',
-  //     priority: 'Medium',
-  //     description: 'ksdk',
-  //   );
-  //   _tasks.add(task);
-  //   notifyListeners();
-  // }
-
   void addTask(String newTaskTitle, String priority, String deadline,
       String description, DocumentReference userReference) {
     final task = TaskModel(
@@ -42,7 +30,7 @@ class TaskData extends ChangeNotifier {
     );
 
     // Call the addTaskToFirestore method to store the task in Firestore
-    addTaskToFirestore(task, userReference);
+    TaskRepository.addTaskToFirestore(task, userReference);
     notifyListeners();
   }
 
@@ -62,39 +50,6 @@ class TaskData extends ChangeNotifier {
   void clearTasks() {
     _tasks.clear();
     notifyListeners();
-  }
-
-  Future<void> addTaskToFirestore(
-      TaskModel task, DocumentReference userReference) async {
-    try {
-      // Fetch the user's existing tasks
-      final userDocSnapshot = await userReference.get();
-
-      if (userDocSnapshot.exists) {
-        final userData = userDocSnapshot.data() as Map<String, dynamic>;
-        List<dynamic>? tasksList = userData['tasks'];
-
-        // Update the tasks list with the new task
-        if (tasksList == null) {
-          tasksList = [task.toJson()];
-        } else {
-          tasksList.add(task.toJson());
-        }
-
-        // Update the tasks data in Firestore
-        await userReference.update({'tasks': tasksList});
-      } else {
-        // If the user document doesn't exist, create it with the new task
-        await userReference.set({
-          'tasks': [task.toJson()]
-        });
-      }
-    } catch (e) {
-      // Handle errors, e.g., print or throw an exception
-      if (kDebugMode) {
-        print('Error adding task to Firestore: $e');
-      }
-    }
   }
 
   Future<void> fetchAndSetTasks() async {

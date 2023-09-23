@@ -24,11 +24,7 @@ class TaskModel {
   TaskModel.fromJson(Map<String, dynamic> json) {
     name = json['title'];
     description = json['description'];
-    // Convert Firestore Timestamp to DateTime
-    // final timestamp = json['deadline'] as Timestamp?;
     deadline = json['deadline'];
-    // ignore: prefer_null_aware_operators
-    // (timestamp != null ? timestamp.toDate().toLocal().toString() : null)!;
     priority = json['priority'];
     // isDone = json['isDone'];
   }
