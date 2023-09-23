@@ -3,12 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:todoey_app/data/repository/tasks_repo.dart';
 import '../../cubit/task_data.dart';
 import '../../widgets/tasks_list.dart';
 import '../login/login_screen.dart';
 
-// ignore: must_be_immutable
 class AppIndexScreen extends StatefulWidget {
   const AppIndexScreen({super.key});
   @override
@@ -17,18 +15,14 @@ class AppIndexScreen extends StatefulWidget {
 
 class _AppIndexScreenState extends State<AppIndexScreen> {
   late Future<void> _initializeTaskData;
-  final TaskRepository taskRepository = TaskRepository();
+  TaskData taskData = TaskData();
 
   @override
   void initState() {
     super.initState();
-
-    // Initialize _initializeTaskData with the async initialization
-    // _initializeTaskData =
-    //     Provider.of<TaskData>(context, listen: false).fetchTasksFromFirestore();
-
-    _initializeTaskData = taskRepository.fetchTasks();
-    print('init fetchTasks : $_initializeTaskData');
+    // Call fetchAndSetTasks before displaying the screen
+    _initializeTaskData =
+        Provider.of<TaskData>(context, listen: false).fetchAndSetTasks();
   }
 
   @override
@@ -39,7 +33,6 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
         future: _initializeTaskData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            // Initialization is complete, you can safely access the TaskData provider now
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -50,6 +43,13 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                     right: 30.0,
                     bottom: 30.0,
                   ),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.lightBlueAccent, Colors.blueAccent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -59,7 +59,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                             'Todoey',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 50.0.sp,
+                              fontSize: 40.0.sp,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -84,11 +84,12 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 10.h),
                       Text(
-                        '${Provider.of<TaskData>(context).taskCount} Tasks',
+                        '  You have ${Provider.of<TaskData>(context).taskCount} Tasks',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18.sp,
+                          fontSize: 14.sp,
                         ),
                       ),
                     ],
@@ -110,9 +111,10 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
               ],
             );
           } else {
-            // Return a loading indicator or some other widget while waiting for initialization
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Colors.blueAccent,
+              ),
             );
           }
         },
@@ -120,17 +122,10 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
     );
   }
 
-  // Method to reset the app's state
   void resetAppState(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    // Clear any app-specific data or state here
+    final FirebaseAuth auth = FirebaseAuth.instance;
     Provider.of<TaskData>(context, listen: false).clearTasks();
-
-    // Sign out the user
-    _auth.signOut();
-
-    // Navigate to the login screen
+    auth.signOut();
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

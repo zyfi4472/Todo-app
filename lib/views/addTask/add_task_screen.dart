@@ -2,16 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey_app/cubit/task_data.dart';
 import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/widgets/calendar_container.dart';
 import 'package:todoey_app/widgets/priority_dropdown.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  final DocumentReference? userReference;
+  final DocumentReference userReference;
   final MyDropdownWidget dropdownWidget =
       const MyDropdownWidget(); // Add this line
 
-  const AddTaskScreen({super.key, this.userReference});
+  const AddTaskScreen({super.key, required this.userReference});
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
@@ -19,7 +21,8 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final user = FirebaseAuth.instance.currentUser;
   DateTime taskDeadline = DateTime.now();
-  TextEditingController? newTaskTitleController = TextEditingController();
+  late String taskTitle, taskDescription;
+  TextEditingController newTaskTitleController = TextEditingController();
   TextEditingController? newTaskDescriptionController = TextEditingController();
 
   @override
@@ -97,29 +100,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             SizedBox(height: 15.h),
             TextButton(
               onPressed: () async {
-                if (widget.userReference != null) {
-                  // Add the new task to the user's document
-                  // if (kDebugMode) {
-                  //   print('user ref not null');
-                  // }
+                taskTitle = newTaskTitleController
+                    .text; // Use text property to get the text from the controller
+                taskDescription = newTaskDescriptionController!
+                    .text; // Use text property to get the text from the controller
+                Provider.of<TaskData>(context, listen: false).addTask(
+                    taskTitle,
+                    selectedValue,
+                    taskDeadline
+                        .toUtc()
+                        .toString(), // Convert DateTime to String
+                    taskDescription,
+                    widget.userReference);
 
-                  // Get the selected value from MyDropdownWidget
-
-                  await widget.userReference!.update({
-                    'tasks': FieldValue.arrayUnion([
-                      {
-                        'title': newTaskTitleController!.text,
-                        'description': newTaskDescriptionController!.text,
-                        'priority': selectedValue,
-                        'deadline': taskDeadline.toUtc(),
-                      },
-                    ]),
-                  });
-
-                  // Navigate back to the UserListScreen
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
-                }
+                // Navigate back to the UserListScreen
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,

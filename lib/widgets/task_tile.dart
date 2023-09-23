@@ -4,7 +4,7 @@ import 'package:todoey_app/widgets/task_detail_item.dart';
 
 class TaskTile extends StatelessWidget {
   // Properties to store task information
-  final bool isChecked;
+  // final bool? isChecked;
   final String taskTitle;
   final String taskDescription;
   final String taskPriority;
@@ -17,7 +17,7 @@ class TaskTile extends StatelessWidget {
   // Constructor to initialize the TaskTile
   const TaskTile({
     super.key,
-    required this.isChecked,
+    // required this.isChecked,
     required this.taskTitle,
     required this.taskDeadline,
     required this.taskPriority,
@@ -54,13 +54,13 @@ class TaskTile extends StatelessWidget {
                   taskTitle,
                   style: TextStyle(
                     fontSize: 14.sp,
-                    decoration: isChecked ? TextDecoration.lineThrough : null,
+                    // decoration: isChecked ? TextDecoration.lineThrough : null,
                   ),
                 ),
                 const Spacer(),
                 Checkbox(
                   activeColor: Colors.lightBlueAccent,
-                  value: isChecked,
+                  value: false,
                   onChanged: checkboxCallback,
                 ),
               ],
@@ -71,7 +71,7 @@ class TaskTile extends StatelessWidget {
             TaskDetailItem(
               heading: 'Description:',
               text: taskDescription,
-              isChecked: isChecked,
+              // isChecked: isChecked,
             ),
             SizedBox(height: 10.h),
 
@@ -79,7 +79,7 @@ class TaskTile extends StatelessWidget {
             TaskDetailItem(
               heading: 'Priority:',
               text: taskPriority,
-              isChecked: isChecked,
+              // isChecked: isChecked,
             ),
             SizedBox(height: 10.h),
 
@@ -87,7 +87,7 @@ class TaskTile extends StatelessWidget {
             TaskDetailItem(
               heading: 'Deadline:',
               text: taskDeadline,
-              isChecked: isChecked,
+              // isChecked: isChecked,
             ),
           ],
         ),

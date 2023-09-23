@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:todoey_app/authetication/authentication.dart';
+import 'package:todoey_app/data/repository/tasks_repo.dart';
 import 'dart:collection';
 
 import '../data/model/task_model.dart';
 
 class TaskData extends ChangeNotifier {
   final taskAuth = FirebaseAuthentication();
-  List<Task> _tasks = [];
+  TaskRepository taskRepository = TaskRepository();
+  TaskResultModel taskResultModel = TaskResultModel();
 
-  UnmodifiableListView<Task> get tasks {
+  List<TaskModel> _tasks = [];
+
+  UnmodifiableListView<TaskModel> get tasks {
     return UnmodifiableListView(_tasks);
   }
 
@@ -19,22 +21,37 @@ class TaskData extends ChangeNotifier {
     return _tasks.length;
   }
 
-  void addTask(String newTaskTitle) {
-    final task = Task(
-        name: newTaskTitle,
-        deadline: '',
-        priority: 'Medium',
-        description: 'ksdk');
-    _tasks.add(task);
+  // void addTask(String newTaskTitle) {
+  //   final task = TaskModel(
+  //     name: newTaskTitle,
+  //     deadline: '',
+  //     priority: 'Medium',
+  //     description: 'ksdk',
+  //   );
+  //   _tasks.add(task);
+  //   notifyListeners();
+  // }
+
+  void addTask(String newTaskTitle, String priority, String deadline,
+      String description, DocumentReference userReference) {
+    final task = TaskModel(
+      name: newTaskTitle,
+      deadline: deadline,
+      priority: priority,
+      description: description,
+    );
+
+    // Call the addTaskToFirestore method to store the task in Firestore
+    addTaskToFirestore(task, userReference);
     notifyListeners();
   }
 
-  void updateTask(Task task) {
+  void updateTask(TaskModel task) {
     task.toggleDone();
     notifyListeners();
   }
 
-  void deleteTask(Task task) {
+  void deleteTask(TaskModel task) {
     // To delete a task
     _tasks.remove(task);
     // taskAuth.deleteTaskFromFirestore(task);
@@ -47,54 +64,51 @@ class TaskData extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchTasksFromFirestore() async {
-    // if (kDebugMode) {
-    print('Fetching Tasks');
-    // }
+  Future<void> addTaskToFirestore(
+      TaskModel task, DocumentReference userReference) async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
+      // Fetch the user's existing tasks
+      final userDocSnapshot = await userReference.get();
 
-      if (user != null) {
-        final userDocRef =
-        FirebaseFirestore.instance.collection('users').doc(user.uid);
-        print('User not null');
+      if (userDocSnapshot.exists) {
+        final userData = userDocSnapshot.data() as Map<String, dynamic>;
+        List<dynamic>? tasksList = userData['tasks'];
 
-        final userDocSnapshot = await userDocRef.get();
-
-        if (userDocSnapshot.exists) {
-          print('userDocSnapshot exists');
-
-          final tasksData = userDocSnapshot.data() as Map<String, dynamic>;
-          // print('Tasks Data: $tasksData'); // Print the entire map for debugging
-          final List<dynamic>? tasksList = tasksData['tasks'];
-
-          if (tasksList != null) {
-            _tasks = tasksList.map((taskData) {
-              final deadlineTimestamp = taskData['deadline'] as Timestamp?;
-              final deadline = deadlineTimestamp != null
-                  ? DateFormat('dd-MM-yyyy').format(deadlineTimestamp.toDate())
-                  : 'No Deadline';
-              print(
-                  'Task Deadline: $deadline'); // Print the deadline value for debugging
-              return Task(
-                name: taskData['title'],
-                description: taskData['description'],
-                priority: taskData['priority'],
-                deadline: deadline,
-              );
-            }).toList();
-
-            notifyListeners(); // Notify listeners after updating _tasks
-          }
+        // Update the tasks list with the new task
+        if (tasksList == null) {
+          tasksList = [task.toJson()];
+        } else {
+          tasksList.add(task.toJson());
         }
+
+        // Update the tasks data in Firestore
+        await userReference.update({'tasks': tasksList});
+      } else {
+        // If the user document doesn't exist, create it with the new task
+        await userReference.set({
+          'tasks': [task.toJson()]
+        });
       }
-      // if (kDebugMode) {
-      print('Tasks Fetched');
-      // }
     } catch (e) {
-      // if (kDebugMode) {
-      print("Error fetching data: $e");
-      // }
+      // Handle errors, e.g., print or throw an exception
+      if (kDebugMode) {
+        print('Error adding task to Firestore: $e');
+      }
+    }
+  }
+
+  Future<void> fetchAndSetTasks() async {
+    try {
+      final tasks =
+          await taskRepository.fetchTasks(); // Fetch tasks using repository
+      if (tasks != null) {
+        _tasks = tasks;
+        notifyListeners(); // Notify listeners after updating _tasks
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching and setting tasks: $e');
+      }
     }
   }
 }

@@ -6,11 +6,11 @@ class TaskDetailItem extends StatelessWidget {
     super.key,
     required this.text,
     required this.heading,
-    required this.isChecked,
+    // required this.isChecked,
   });
 
   final String text;
-  final bool isChecked;
+  // final bool isChecked;
   final String heading;
 
   @override
@@ -30,7 +30,7 @@ class TaskDetailItem extends StatelessWidget {
           text,
           style: TextStyle(
             fontSize: 14.sp,
-            decoration: isChecked ? TextDecoration.lineThrough : null,
+            // decoration: isChecked ? TextDecoration.lineThrough : null,
           ),
         ),
       ],

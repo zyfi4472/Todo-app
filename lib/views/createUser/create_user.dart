@@ -26,8 +26,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                width: 120.w,
-                height: 120.h,
+                width: 120,
+                height: 120,
                 'images/todoLogo.png',
               ),
               Text(

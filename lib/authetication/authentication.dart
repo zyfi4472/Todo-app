@@ -56,7 +56,7 @@ class FirebaseAuthentication {
     }
   }
 
-  void deleteTaskFromFirestore(Task task) async {
+  void deleteTaskFromFirestore(TaskModel task) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
 
