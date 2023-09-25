@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoey_app/authetication/authentication.dart';
+import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
 import 'package:todoey_app/reuseableComponents/input_field_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -116,14 +118,20 @@ class _LoginScreenState extends State<LoginScreen> {
       final user = await auth.signIn(email!, password!);
 
       if (user != null) {
+        String userId = user.uid;
         // Sign-in was successful
         final isAdmin = await checkAdminStatus(user.uid);
 
         // ignore: use_build_context_synchronously
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => MyPageView(isAdmin: isAdmin)),
         );
+
+        var sharedPref = await SharedPreferences.getInstance();
+        sharedPref.setBool(isLoggedInKey, true);
+        sharedPref.setString(userIdKey, userId);
+        sharedPref.setBool(isAdminKey, isAdmin);
       } else {
         // Handle sign-in failure
         showFlutterToast("Login unsuccessful. Please try again.");

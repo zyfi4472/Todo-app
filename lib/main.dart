@@ -4,50 +4,78 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoey_app/firebase_options.dart';
+import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
 import 'package:todoey_app/views/login/login_screen.dart';
 import 'cubit/task_data.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  var sharedPref = await SharedPreferences.getInstance();
+  var isAdmin = sharedPref.getBool(isAdminKey);
+
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => TaskData(), // Replace with your actual data provider
+      child: MyApp(isAdmin: isAdmin),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final bool? isAdmin;
+
+  const MyApp({Key? key, this.isAdmin}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  // Get the current user
-  final user = FirebaseAuth.instance.currentUser;
-
   @override
   void initState() {
     super.initState();
+    whereToGo();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: checkAdminStatus(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // While checking admin status, show a loading indicator
-          return const Center(child: CircularProgressIndicator());
-        } else {
-          // Check if user is not null and isAdmin is true
-          final isAdmin = user != null && snapshot.data == true;
+    // Initialize ScreenUtil here with the context argument
+    ScreenUtil.init(
+      context,
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+    );
 
-          if (user != null) {
-            // If isAdmin is true, show the MyPageView
+    return MaterialApp(
+      navigatorKey: navigatorKey, // Set the navigatorKey
+      home: FutureBuilder<bool>(
+        future: checkAdminStatus(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While checking admin status, show a loading indicator
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            // final user = FirebaseAuth.instance.currentUser;
+
+            // // Check if user is not null and isAdmin is true
+            // final isAdmin = FirebaseAuth.instance.currentUser != null &&
+            //     snapshot.data == true;
+
+            // Use the null-aware operator to provide a default value
+            final isAdmin = widget.isAdmin ?? false;
+
+            // Return either MyPageView or LoginScreen based on the conditions
             return ScreenUtilInit(
               designSize: const Size(360, 690),
               minTextAdapt: true,
@@ -56,47 +84,61 @@ class _MyAppState extends State<MyApp> {
                 return ChangeNotifierProvider(
                   create: (context) => TaskData(),
                   child: MaterialApp(
-                    home: MyPageView(isAdmin: isAdmin),
+                    home: isAdmin
+                        ? MyPageView(isAdmin: isAdmin)
+                        : const LoginScreen(),
                   ),
                 );
               },
             );
           }
-          // Default return when no condition matches
-          return ScreenUtilInit(
-            designSize: const Size(360, 690),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            builder: (_, child) {
-              return ChangeNotifierProvider(
-                create: (context) => TaskData(),
-                child: const MaterialApp(
-                  home: LoginScreen(),
-                ),
-              );
-            },
-          );
-        }
-      },
+        },
+      ),
     );
   }
 
   Future<bool> checkAdminStatus() async {
-    // Reference to the user's document in Firestore
-    final userDocRef =
-        FirebaseFirestore.instance.collection('users').doc(user?.uid);
+    final user = FirebaseAuth.instance.currentUser;
 
-    // Get the user's data from Firestore
-    final userData = await userDocRef.get();
+    var sharedPref = await SharedPreferences.getInstance();
 
-    if (!userData.exists) {
-      // User document doesn't exist in Firestore
+    String? userId = sharedPref.getString(userIdKey);
+
+    if (user == null) {
       return false;
     }
 
-    // Check the isAdmin field
-    final isAdmin = userData.data()?['isAdmin'] ?? false;
+    final userDocRef =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
 
-    return isAdmin;
+    final userData = await userDocRef.get();
+
+    if (!userData.exists) {
+      return false;
+    }
+
+    return userData.data()?['isAdmin'] ?? false;
+  }
+
+  void whereToGo() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    var isLoggedIn = sharedPref.getBool(isLoggedInKey);
+    var isAdmin = sharedPref.getBool(isAdminKey);
+
+    if (isLoggedIn != null) {
+      navigatorKey.currentState?.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => isLoggedIn
+              ? MyPageView(isAdmin: isAdmin ?? false)
+              : const LoginScreen(),
+        ),
+      );
+    } else {
+      navigatorKey.currentState?.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
+    }
   }
 }

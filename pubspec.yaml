@@ -43,9 +43,9 @@ dependencies:
   cloud_firestore: ^4.9.1
   flutter_screenutil: ^5.9.0
   intl: ^0.18.1
-  flutter_native_splash: ^2.3.2
   json_annotation: ^4.8.1
   local_auth: ^2.1.7
+  shared_preferences: ^2.2.1
 
 dev_dependencies:
   flutter_test:
