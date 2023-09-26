@@ -21,7 +21,7 @@ class TaskData extends ChangeNotifier {
   }
 
   void addTask(String newTaskTitle, String priority, String deadline,
-      String description, DocumentReference userReference) {
+      String description, DocumentReference userDocReference) {
     final task = TaskModel(
       name: newTaskTitle,
       deadline: deadline,
@@ -30,7 +30,7 @@ class TaskData extends ChangeNotifier {
     );
 
     // Call the addTaskToFirestore method to store the task in Firestore
-    TaskRepository.addTaskToFirestore(task, userReference);
+    TaskRepository.addTaskToFirestore(task, userDocReference);
     notifyListeners();
   }
 

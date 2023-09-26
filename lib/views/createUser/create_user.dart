@@ -61,6 +61,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                 icon: const Icon(Icons.lock_outline_rounded),
                 heading: 'Password',
                 labelText: '********',
+                obscureText: true,
                 onChanged: (newValue) {
                   password = newValue;
                 },

@@ -6,9 +6,11 @@ class InputField extends StatefulWidget {
   final Icon icon;
   final String heading;
   final String labelText;
+  final bool obscureText;
 
   const InputField({
     Key? key,
+    this.obscureText = false, // Default value is false (not obscured)
     required this.onChanged,
     required this.icon,
     required this.heading,
@@ -61,6 +63,7 @@ class _InputFieldState extends State<InputField> {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            obscureText: widget.obscureText, // Use the obscureText property
             focusNode: _focusNode,
             controller: _textEditingController,
             onChanged: (value) {

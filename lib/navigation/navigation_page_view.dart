@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/navigation/bottom_nav.dart';
-
 import '../views/createUser/create_user.dart';
 import '../views/index/app_index_screen.dart';
 import '../views/users/users_screen.dart';
 
 class MyPageView extends StatefulWidget {
-  final bool isAdmin; // Add this variable to hold the isAdmin status
-
-  const MyPageView(
-      {super.key, required this.isAdmin}); // Pass isAdmin as a parameter
+  const MyPageView({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -49,8 +45,7 @@ class _MyPageViewState extends State<MyPageView> {
       ),
       bottomNavigationBar: Visibility(
         // Use the Visibility widget to conditionally show/hide the BottomNavBar
-        visible:
-            widget.isAdmin, // Use the isAdmin passed from the parent widget
+        visible: isAdminGlobal, // Use the isAdminGlobal variable
         child: BottomNavBar(
           currentIndex: _currentIndex,
           onItemTapped: _onItemTapped,

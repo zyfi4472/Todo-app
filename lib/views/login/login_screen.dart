@@ -1,16 +1,13 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
 import 'package:todoey_app/reuseableComponents/input_field_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
 import '../../reuseableComponents/flutter_toast.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -70,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 icon: const Icon(Icons.lock_outline_rounded),
                 heading: 'Password',
                 labelText: '********',
+                obscureText: true,
                 onChanged: (newValue) {
                   password = newValue;
                 },
@@ -88,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       backgroundColor: Colors.lightBlueAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
-                            10.0), // Adjust the radius as needed
+                            10.0.r), // Adjust the radius as needed
                       ),
                     ),
                     child: const Text('Login'),
@@ -125,13 +123,17 @@ class _LoginScreenState extends State<LoginScreen> {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyPageView(isAdmin: isAdmin)),
+          MaterialPageRoute(
+            builder: (context) => const MyPageView(),
+          ), //isAdmin: isAdmin
         );
 
-        var sharedPref = await SharedPreferences.getInstance();
-        sharedPref.setBool(isLoggedInKey, true);
-        sharedPref.setString(userIdKey, userId);
-        sharedPref.setBool(isAdminKey, isAdmin);
+        sharedPrefGlobal.setBool(isLoggedInKey, true);
+        sharedPrefGlobal.setString(userIdKey, userId);
+        sharedPrefGlobal.setBool(isAdminKey, isAdmin);
+        isLoggedInGlobal = true;
+        userIdGlobal = userId;
+        isAdminGlobal = isAdmin;
       } else {
         // Handle sign-in failure
         showFlutterToast("Login unsuccessful. Please try again.");

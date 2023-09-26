@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/services/local_auth_service.dart';
 import '../../cubit/task_data.dart';
@@ -152,8 +151,6 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
         builder: (context) => const LoginScreen(),
       ),
     );
-    var sharedPref = await SharedPreferences.getInstance();
-    sharedPref.setBool(isLoggedInKey, false);
-    sharedPref.clear();
+    sharedPrefGlobal.clear();
   }
 }
