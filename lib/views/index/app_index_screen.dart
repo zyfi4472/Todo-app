@@ -1,23 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/globals.dart';
-import 'package:todoey_app/services/local_auth_service.dart';
+import 'package:todoey_app/views/addTask/add_task_screen.dart';
 import '../../cubit/task_data.dart';
 import '../../widgets/tasks_list.dart';
 import '../login/login_screen.dart';
 
 class AppIndexScreen extends StatefulWidget {
   const AppIndexScreen({super.key});
+
   @override
   State<AppIndexScreen> createState() => _AppIndexScreenState();
 }
 
 class _AppIndexScreenState extends State<AppIndexScreen> {
   late Future<void> _initializeTaskData;
-  bool authenticated = false;
 
   @override
   void initState() {
@@ -30,6 +31,33 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Visibility(
+        visible: isAdminGlobal,
+        child: FloatingActionButton(
+          backgroundColor: Colors.lightBlueAccent,
+          child: const Icon(Icons.add),
+          onPressed: () async {
+            final userDocRef = FirebaseFirestore.instance
+                .collection('users')
+                .doc(userIdGlobal);
+
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: AddTaskScreen(
+                    userDocReference: userDocRef,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
       backgroundColor: Colors.lightBlueAccent,
       body: FutureBuilder<void>(
         future: _initializeTaskData,
@@ -71,8 +99,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                               if (kDebugMode) {
                                 print('signout clicked');
                               }
-                              resetAppState(
-                                  context); // Call the reset method when signing out
+                              resetAppState(context);
                             },
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
@@ -86,29 +113,12 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                           ),
                         ],
                       ),
-                      // ElevatedButton(
-                      //     onPressed: () async {
-                      //       final authenticate = await LocalAuth.authenticate();
-                      //       setState(() {
-                      //         authenticated = authenticate;
-                      //       });
-                      //     },
-                      //     child: const Text('Authenticate')),
-                      // if (authenticated) const Text('Local auth successful'),
-                      // if (authenticated)
-                      //   ElevatedButton(
-                      //       onPressed: () {
-                      //         setState(() {
-                      //           authenticated = false;
-                      //         });
-                      //       },
-                      //       child: const Text('Cancel auth')),
-                      SizedBox(height: 10.h),
+                      SizedBox(height: 20.h),
                       Text(
-                        '  You have ${Provider.of<TaskData>(context).taskCount} Tasks',
+                        'You have ${Provider.of<TaskData>(context).taskCount} Tasks',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14.sp,
+                          fontSize: 16.sp,
                         ),
                       ),
                     ],
@@ -116,7 +126,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(

@@ -117,8 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (user != null) {
         String userId = user.uid;
+
+        // Reference to the user's tasks sub-collection
+        final userDocRef =
+            FirebaseFirestore.instance.collection('users').doc(userId);
+
         // Sign-in was successful
-        final isAdmin = await checkAdminStatus(user.uid);
+        final isAdmin = await checkAdminStatus(userId);
 
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
@@ -131,9 +136,11 @@ class _LoginScreenState extends State<LoginScreen> {
         sharedPrefGlobal.setBool(isLoggedInKey, true);
         sharedPrefGlobal.setString(userIdKey, userId);
         sharedPrefGlobal.setBool(isAdminKey, isAdmin);
+
         isLoggedInGlobal = true;
         userIdGlobal = userId;
         isAdminGlobal = isAdmin;
+        // userDocReferanceGlobal = userDocRef;
       } else {
         // Handle sign-in failure
         showFlutterToast("Login unsuccessful. Please try again.");

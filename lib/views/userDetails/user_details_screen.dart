@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../addTask/add_task_screen.dart';
 
 class UserDetailsScreen extends StatelessWidget {
-  final DocumentReference userReference;
+  final DocumentReference userDocReference;
 
-  const UserDetailsScreen({Key? key, required this.userReference})
+  const UserDetailsScreen({Key? key, required this.userDocReference})
       : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class UserDetailsScreen extends StatelessWidget {
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
                     child: AddTaskScreen(
-                      userReference: userReference,
+                      userDocReference: userDocReference,
                     ),
                   ),
                 ),
@@ -48,7 +48,7 @@ class UserDetailsScreen extends StatelessWidget {
         ],
       ),
       body: FutureBuilder<DocumentSnapshot>(
-        future: userReference.get(),
+        future: userDocReference.get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Display a loading indicator while waiting for data
@@ -97,25 +97,26 @@ class UserDetailsScreen extends StatelessWidget {
                     final isDone = task['isDone'] ?? false;
 
                     return Card(
-                        elevation: 7,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.r),
-                          ),
+                      elevation: 7,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.r),
                         ),
-                        child: ListTile(
-                          title: Text(taskTitle),
-                          trailing: Checkbox(
-                            value: isDone,
-                            onChanged: (newValue) {
-                              // Update the 'isDone' status in the user document's "tasks" array
+                      ),
+                      child: ListTile(
+                        title: Text(taskTitle),
+                        trailing: Checkbox(
+                          value: isDone,
+                          onChanged: (newValue) {
+                            // Update the 'isDone' status in the user document's "tasks" array
 
-                              // tasks[index]['isDone'] = newValue;
+                            // tasks[index]['isDone'] = newValue;
 
-                              userReference.update({'tasks': tasks});
-                            },
-                          ),
-                        ));
+                            userDocReference.update({'tasks': tasks});
+                          },
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),

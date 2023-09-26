@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,7 +64,6 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       navigatorKey: navigatorKey, // Set the navigatorKey
       home: FutureBuilder<bool>(
-        // No need to call checkAdminStatus() here
         future: Future.value(
             widget.isAdmin ?? false), // Use the isAdmin value directly
         builder: (context, snapshot) {
@@ -112,6 +112,7 @@ class _MyAppState extends State<MyApp> {
     var isLoggedIn = sharedPref.getBool(isLoggedInKey);
     var isAdmin = sharedPref.getBool(isAdminKey);
     var userId = sharedPref.getString(userIdKey);
+
     sharedPrefGlobal = sharedPref;
     isLoggedInGlobal = isLoggedIn ?? false;
     isAdminGlobal = isAdmin ?? false;

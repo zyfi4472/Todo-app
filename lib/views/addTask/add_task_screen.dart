@@ -9,11 +9,10 @@ import 'package:todoey_app/widgets/calendar_container.dart';
 import 'package:todoey_app/widgets/priority_dropdown.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  final DocumentReference userReference;
-  final MyDropdownWidget dropdownWidget =
-      const MyDropdownWidget(); // Add this line
+  final DocumentReference userDocReference;
 
-  const AddTaskScreen({super.key, required this.userReference});
+  const AddTaskScreen({super.key, required this.userDocReference});
+
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
@@ -80,8 +79,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ),
                 ),
                 _buildDateButton(
-                    onPressed: () => _selectTaskDeadline(context),
-                    selectedDate: taskDeadline),
+                  onPressed: () => _selectTaskDeadline(context),
+                  selectedDate: taskDeadline,
+                ),
               ],
             ),
             SizedBox(height: 15.h),
@@ -94,27 +94,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const MyDropdownWidget(), // Use the instance here
+                // Use the dropdown widget instance here
+                const MyDropdownWidget(),
               ],
             ),
             SizedBox(height: 15.h),
             TextButton(
               onPressed: () async {
-                taskTitle = newTaskTitleController
-                    .text; // Use text property to get the text from the controller
-                taskDescription = newTaskDescriptionController!
-                    .text; // Use text property to get the text from the controller
-                Provider.of<TaskData>(context, listen: false).addTask(
-                    taskTitle,
-                    selectedValue,
-                    taskDeadline
-                        .toUtc()
-                        .toString(), // Convert DateTime to String
-                    taskDescription,
-                    widget.userReference);
+                // Get text from controllers
+                taskTitle = newTaskTitleController.text;
+                taskDescription = newTaskDescriptionController!.text;
 
-                // Navigate back to the UserListScreen
-                // ignore: use_build_context_synchronously
+                // Add the task to the provider
+                Provider.of<TaskData>(context, listen: false).addTask(
+                  taskTitle,
+                  selectedValue,
+                  taskDeadline.toUtc().toString(),
+                  taskDescription,
+                  widget.userDocReference,
+                );
+                // Navigate back to the previous screen
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(
@@ -129,6 +128,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
+  // Helper widget to build the date button
   Widget _buildDateButton(
       {required VoidCallback onPressed, required DateTime selectedDate}) {
     return TextButton(
@@ -137,6 +137,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     );
   }
 
+  // Function to handle date selection
   Future<void> _selectTaskDeadline(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
