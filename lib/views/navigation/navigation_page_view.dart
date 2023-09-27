@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/views/widgets/bottom_nav.dart';
-import '../screens/createUser/create_user.dart';
+import '../screens/createUser/create_user_screen.dart';
 import '../screens/index/app_index_screen.dart';
 import '../screens/users/users_screen.dart';
 

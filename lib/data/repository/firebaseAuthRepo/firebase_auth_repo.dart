@@ -16,6 +16,7 @@ abstract class FirebaseAuthRepo {
 class FirebaseAuthentication implements FirebaseAuthRepo {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  @override
   Future<User?> CreateUser(String email, String password, String name) async {
     try {
       final newUser = await _auth.createUserWithEmailAndPassword(
@@ -48,6 +49,7 @@ class FirebaseAuthentication implements FirebaseAuthRepo {
     }
   }
 
+  @override
   Future<User?> signIn(String email, String password) async {
     try {
       final userCredential = await _auth.signInWithEmailAndPassword(

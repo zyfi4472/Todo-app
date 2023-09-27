@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../../../cubit/authentication/cubit/login_cubit.dart';
+import '../../../cubit/authentication/login/cubit/login_cubit.dart';
 import '../../../globals.dart';
 import '../../navigation/navigation_page_view.dart';
 import '../../widgets/flutter_toast.dart';

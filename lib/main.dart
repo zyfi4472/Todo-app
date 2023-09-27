@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todoey_app/cubit/authentication/createUser/cubit/create_user_cubit.dart';
 
-import 'cubit/authentication/cubit/login_cubit.dart';
+import 'cubit/authentication/login/cubit/login_cubit.dart';
 import 'cubit/task/cubit/addTask/add_task_cubit.dart';
 import 'cubit/task/cubit/fetchTask/fetch_task_cubit.dart';
 import 'data/repository/firebaseAuthRepo/firebase_auth_repo.dart';
@@ -76,6 +77,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(firebaseAuthRepo),
+        ),
+        BlocProvider<CreateUserCubit>(
+          create: (context) => CreateUserCubit(firebaseAuthRepo),
         ),
       ],
       child: MaterialApp(

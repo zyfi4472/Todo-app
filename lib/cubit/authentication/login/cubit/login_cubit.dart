@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../data/repository/firebaseAuthRepo/firebase_auth_repo.dart';
+import '../../../../data/repository/firebaseAuthRepo/firebase_auth_repo.dart';
 
 part 'login_state.dart';
 
@@ -16,9 +16,6 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginInProgressState());
 
       final user = await firebaseAuthRepo.signIn(email, password);
-      if (user != null) {
-        print('user not null');
-      }
 
       emit(LoginSuccessState(user!));
     } catch (e) {
