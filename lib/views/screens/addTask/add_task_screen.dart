@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_app/cubit/task_data.dart';
 import 'package:todoey_app/globals.dart';
-import 'package:todoey_app/widgets/calendar_container.dart';
-import 'package:todoey_app/widgets/priority_dropdown.dart';
+import 'package:todoey_app/views/widgets/calendar_container.dart';
+import 'package:todoey_app/views/widgets/priority_dropdown.dart';
 
 class AddTaskScreen extends StatefulWidget {
   final DocumentReference userDocReference;
@@ -106,7 +106,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 taskDescription = newTaskDescriptionController!.text;
 
                 // Add the task to the provider
-                Provider.of<TaskData>(context, listen: false).addTask(
+                Provider.of<TaskDataController>(context, listen: false).addTask(
                   taskTitle,
                   selectedValue,
                   taskDeadline.toUtc().toString(),

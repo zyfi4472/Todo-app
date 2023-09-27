@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todoey_app/globals.dart';
-import 'package:todoey_app/navigation/bottom_nav.dart';
-import '../views/createUser/create_user.dart';
-import '../views/index/app_index_screen.dart';
-import '../views/users/users_screen.dart';
+import 'package:todoey_app/views/widgets/bottom_nav.dart';
+import '../screens/createUser/create_user.dart';
+import '../screens/index/app_index_screen.dart';
+import '../screens/users/users_screen.dart';
 
 class MyPageView extends StatefulWidget {
   const MyPageView({super.key});

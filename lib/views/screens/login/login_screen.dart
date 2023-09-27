@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todoey_app/authetication/authentication.dart';
 import 'package:todoey_app/globals.dart';
-import 'package:todoey_app/navigation/navigation_page_view.dart';
-import 'package:todoey_app/reuseableComponents/input_field_widget.dart';
+import 'package:todoey_app/views/navigation/navigation_page_view.dart';
+import 'package:todoey_app/views/widgets/input_field_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../../reuseableComponents/flutter_toast.dart';
+import '../../widgets/flutter_toast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

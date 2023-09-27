@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:todoey_app/cubit/task/cubit/task_cubit.dart';
-import 'package:todoey_app/cubit/task_data.dart';
 import 'package:todoey_app/data/model/task_model.dart';
-import 'package:todoey_app/widgets/task_tile.dart';
+import 'package:todoey_app/views/widgets/task_tile.dart';
+
+import '../../cubit/task/cubit/fetchTask/fetch_task_cubit.dart';
 
 class TasksList extends StatelessWidget {
   const TasksList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TaskCubit, TaskState>(
+    return BlocBuilder<FetchTaskCubit, FetchTaskState>(
       builder: (context, state) {
-        if (state is TaskLoading) {
+        if (state is FetchTaskLoading) {
           // Show a loading indicator or return a loading widget
           return const CircularProgressIndicator();
-        } else if (state is TaskEmpty) {
+        } else if (state is FetchTaskEmpty) {
           return const Center(
             child: Text(
               'Task list is empty',
               style: TextStyle(color: Colors.red),
             ),
           );
-        } else if (state is TaskLoaded) {
+        } else if (state is FetchTaskLoaded) {
           // Access the list of tasks from the state
           final List<TaskModel> tasks = state.tasks;
 
@@ -48,10 +48,10 @@ class TasksList extends StatelessWidget {
                       taskPriority: task.priority,
                       // isChecked: task.isDone,
                       checkboxCallback: (checkboxState) {
-                        // Add your checkbox logic here
+                        // Add checkbox logic here
                       },
                       longPressCallback: () {
-                        // Add your long press logic here
+                        // Add long press logic here
                       },
                     );
                   },

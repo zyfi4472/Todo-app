@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todoey_app/cubit/task/cubit/task_cubit.dart';
-import 'package:todoey_app/data/repository/tasks_repo.dart';
-import 'package:todoey_app/firebase_options.dart';
-import 'package:todoey_app/globals.dart';
-import 'package:todoey_app/navigation/navigation_page_view.dart';
-import 'package:todoey_app/views/login/login_screen.dart';
+import 'package:todoey_app/cubit/task/cubit/addTask/add_task_cubit.dart';
+import 'cubit/task/cubit/fetchTask/fetch_task_cubit.dart';
 import 'cubit/task_data.dart';
+import 'data/repository/tasks_repo.dart';
+import 'firebase_options.dart';
+import 'globals.dart';
+import 'views/navigation/navigation_page_view.dart';
+import 'views/screens/login/login_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -25,10 +26,7 @@ void main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => TaskData(), // Replace with your actual data provider
-      child: MyApp(isAdmin: isAdmin),
-    ),
+    MyApp(isAdmin: isAdmin),
   );
 }
 
@@ -68,8 +66,11 @@ class _MyAppState extends State<MyApp> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<TaskCubit>(
-          create: (context) => TaskCubit(taskRepo),
+        BlocProvider<FetchTaskCubit>(
+          create: (context) => FetchTaskCubit(taskRepo),
+        ),
+        BlocProvider<AddTaskCubit>(
+          create: (context) => AddTaskCubit(taskRepo),
         ),
       ],
       child: MaterialApp(

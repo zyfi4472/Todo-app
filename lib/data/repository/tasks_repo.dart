@@ -10,6 +10,7 @@ abstract class TaskRepo {
 }
 
 class TaskRepository implements TaskRepo {
+  @override
   Future<List<TaskModel>?> fetchTasks() async {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -47,6 +48,7 @@ class TaskRepository implements TaskRepo {
     return []; // Return an empty list if there are no tasks or an error occurs
   }
 
+  @override
   Future<void> addTaskToFirestore(
       TaskModel task, DocumentReference userReference) async {
     try {

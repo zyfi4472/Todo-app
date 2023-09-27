@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:todoey_app/cubit/task/cubit/task_cubit.dart';
-import 'package:todoey_app/globals.dart';
-import 'package:todoey_app/views/addTask/add_task_screen.dart';
-import '../../cubit/task_data.dart';
+
+import '../../../cubit/task/cubit/fetchTask/fetch_task_cubit.dart';
+import '../../../cubit/task_data.dart';
+import '../../../globals.dart';
 import '../../widgets/tasks_list.dart';
+import '../addTask/add_task_screen.dart';
 import '../login/login_screen.dart';
 
 class AppIndexScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
   void initState() {
     super.initState();
     // Call fetchAndSetTasks before displaying the screen
-    _initializeTaskData = BlocProvider.of<TaskCubit>(context).fetchTasks();
+    _initializeTaskData = BlocProvider.of<FetchTaskCubit>(context).fetchTasks();
     // Provider.of<TaskData>(context, listen: false).fetchAndSetTasks();
   }
 
@@ -117,7 +118,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                       ),
                       SizedBox(height: 20.h),
                       Text(
-                        'You have ${Provider.of<TaskData>(context).taskCount} Tasks',
+                        'You have ${Provider.of<TaskDataController>(context).taskCount} Tasks',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.sp,
@@ -155,7 +156,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
 
   void resetAppState(BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    Provider.of<TaskData>(context, listen: false).clearTasks();
+    Provider.of<TaskDataController>(context, listen: false).clearTasks();
     auth.signOut();
     Navigator.pushReplacement(
       context,

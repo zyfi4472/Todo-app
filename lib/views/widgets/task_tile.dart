@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:todoey_app/widgets/task_detail_item.dart';
+import 'package:todoey_app/views/widgets/task_detail_item.dart';
 
 class TaskTile extends StatelessWidget {
   // Properties to store task information

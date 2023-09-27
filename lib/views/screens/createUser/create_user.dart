@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:todoey_app/authetication/authentication.dart';
-import 'package:todoey_app/reuseableComponents/flutter_toast.dart';
-import 'package:todoey_app/reuseableComponents/input_field_widget.dart';
+import 'package:todoey_app/views/widgets/flutter_toast.dart';
+import 'package:todoey_app/views/widgets/input_field_widget.dart';
 
 class CreateUserScreen extends StatefulWidget {
   const CreateUserScreen({super.key});

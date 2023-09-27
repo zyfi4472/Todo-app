@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:todoey_app/authetication/authentication.dart';
-import 'package:todoey_app/data/repository/tasks_repo.dart';
-import 'dart:collection';
-import '../data/model/task_model.dart';
 
-class TaskData extends ChangeNotifier {
-  final taskAuth = FirebaseAuthentication();
+import 'dart:collection';
+import '../authetication/authentication.dart';
+import '../data/model/task_model.dart';
+import '../data/repository/tasks_repo.dart';
+
+class TaskDataController {
   TaskRepository taskRepository = TaskRepository();
   TaskResultModel taskResultModel = TaskResultModel();
 
@@ -30,26 +30,26 @@ class TaskData extends ChangeNotifier {
     );
 
     // Call the addTaskToFirestore method to store the task in Firestore
-    // TaskRepository.addTaskToFirestore(task, userDocReference);
-    notifyListeners();
+    // TaskRepo.addTaskToFirestore(task, userDocReference);
+    // notifyListeners();
   }
 
   void updateTask(TaskModel task) {
     task.toggleDone();
-    notifyListeners();
+    // notifyListeners();
   }
 
   void deleteTask(TaskModel task) {
     // To delete a task
     _tasks.remove(task);
     // taskAuth.deleteTaskFromFirestore(task);
-    notifyListeners();
+    // notifyListeners();
   }
 
   // Method to clear all tasks
   void clearTasks() {
     _tasks.clear();
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> fetchAndSetTasks() async {
@@ -58,7 +58,7 @@ class TaskData extends ChangeNotifier {
           await taskRepository.fetchTasks(); // Fetch tasks using repository
       if (tasks != null) {
         _tasks = tasks;
-        notifyListeners(); // Notify listeners after updating _tasks
+        // notifyListeners(); // Notify listeners after updating _tasks
       }
     } catch (e) {
       if (kDebugMode) {
