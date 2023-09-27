@@ -2,12 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todoey_app/cubit/task/cubit/addTask/add_task_cubit.dart';
+
+import 'cubit/authentication/cubit/login_cubit.dart';
+import 'cubit/task/cubit/addTask/add_task_cubit.dart';
 import 'cubit/task/cubit/fetchTask/fetch_task_cubit.dart';
-import 'cubit/task_data.dart';
-import 'data/repository/tasks_repo.dart';
+import 'data/repository/firebaseAuthRepo/firebase_auth_repo.dart';
+import 'data/repository/taskRepo/tasks_repo.dart';
 import 'firebase_options.dart';
 import 'globals.dart';
 import 'views/navigation/navigation_page_view.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // Create an instance of TaskRepo
   final TaskRepo taskRepo = TaskRepository();
+  final FirebaseAuthRepo firebaseAuthRepo = FirebaseAuthentication();
 
   @override
   void initState() {
@@ -71,6 +73,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<AddTaskCubit>(
           create: (context) => AddTaskCubit(taskRepo),
+        ),
+        BlocProvider<LoginCubit>(
+          create: (context) => LoginCubit(firebaseAuthRepo),
         ),
       ],
       child: MaterialApp(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:todoey_app/authetication/authentication.dart';
+import 'package:todoey_app/data/repository/firebaseAuthRepo/firebase_auth_repo.dart';
 import 'package:todoey_app/views/widgets/flutter_toast.dart';
 import 'package:todoey_app/views/widgets/input_field_widget.dart';
 

@@ -1,13 +1,21 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:todoey_app/data/model/task_model.dart';
-import 'package:todoey_app/views/widgets/flutter_toast.dart';
 
-class FirebaseAuthentication {
+import '../../model/task_model.dart';
+import '../../../views/widgets/flutter_toast.dart';
+
+abstract class FirebaseAuthRepo {
+  Future<User?> signIn(String email, String password);
+  Future<User?> CreateUser(String email, String password, String name);
+  deleteTaskFromFirestore(TaskModel task);
+}
+
+class FirebaseAuthentication implements FirebaseAuthRepo {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // ignore: non_constant_identifier_names
   Future<User?> CreateUser(String email, String password, String name) async {
     try {
       final newUser = await _auth.createUserWithEmailAndPassword(
@@ -56,6 +64,7 @@ class FirebaseAuthentication {
     }
   }
 
+  @override
   void deleteTaskFromFirestore(TaskModel task) async {
     try {
       final user = FirebaseAuth.instance.currentUser;

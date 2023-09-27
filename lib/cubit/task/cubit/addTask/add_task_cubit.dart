@@ -1,8 +1,10 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:todoey_app/data/repository/tasks_repo.dart';
-import 'package:todoey_app/data/model/task_model.dart'; // Import your TaskModel
+
+import '../../../../data/model/task_model.dart';
+import '../../../../data/repository/taskRepo/tasks_repo.dart';
 
 part 'add_task_state.dart';
 
@@ -11,17 +13,25 @@ class AddTaskCubit extends Cubit<AddTaskState> {
 
   AddTaskCubit(this.taskRepo) : super(AddTaskInitialState());
 
-  Future<void> addTask(TaskModel task, DocumentReference userReference) async {
+  Future<void> addTask(String newTaskTitle, String priority, String deadline,
+      String description, DocumentReference userDocReference) async {
     try {
       emit(
           AddTaskInProgressState()); // Emit a loading state while the task is being added.
 
-      await taskRepo.addTaskToFirestore(task, userReference);
+      final task = TaskModel(
+        name: newTaskTitle,
+        deadline: deadline,
+        priority: priority,
+        description: description,
+      );
+      await taskRepo.addTaskToFirestore(task, userDocReference);
 
       emit(
           AddTaskSuccessState()); // Emit a success state when the task is added successfully.
     } catch (e) {
-      emit(AddTaskErrorState()); // Emit an error state if an exception occurs.
+      emit(AddTaskErrorState(
+          '$e')); // Emit an error state if an exception occurs.
     }
   }
 }

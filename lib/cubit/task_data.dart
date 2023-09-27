@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import 'dart:collection';
-import '../authetication/authentication.dart';
 import '../data/model/task_model.dart';
-import '../data/repository/tasks_repo.dart';
+import '../data/repository/taskRepo/tasks_repo.dart';
 
 class TaskDataController {
   TaskRepository taskRepository = TaskRepository();
@@ -18,20 +16,6 @@ class TaskDataController {
 
   int get taskCount {
     return _tasks.length;
-  }
-
-  void addTask(String newTaskTitle, String priority, String deadline,
-      String description, DocumentReference userDocReference) {
-    final task = TaskModel(
-      name: newTaskTitle,
-      deadline: deadline,
-      priority: priority,
-      description: description,
-    );
-
-    // Call the addTaskToFirestore method to store the task in Firestore
-    // TaskRepo.addTaskToFirestore(task, userDocReference);
-    // notifyListeners();
   }
 
   void updateTask(TaskModel task) {

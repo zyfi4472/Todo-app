@@ -118,7 +118,8 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
                       ),
                       SizedBox(height: 20.h),
                       Text(
-                        'You have ${Provider.of<TaskDataController>(context).taskCount} Tasks',
+                        'You have infinite Tasks',
+                        // 'You have ${Provider.of<TaskDataController>(context).taskCount} Tasks',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.sp,
@@ -156,7 +157,7 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
 
   void resetAppState(BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    Provider.of<TaskDataController>(context, listen: false).clearTasks();
+    // Provider.of<TaskDataController>(context, listen: false).clearTasks();
     auth.signOut();
     Navigator.pushReplacement(
       context,
