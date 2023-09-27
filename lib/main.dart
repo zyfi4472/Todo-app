@@ -1,9 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todoey_app/cubit/task/cubit/task_cubit.dart';
+import 'package:todoey_app/data/repository/tasks_repo.dart';
 import 'package:todoey_app/firebase_options.dart';
 import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/navigation/navigation_page_view.dart';
@@ -40,6 +42,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // Create an instance of TaskRepo
+  final TaskRepo taskRepo = TaskRepository();
+
   @override
   void initState() {
     super.initState();
@@ -61,32 +66,39 @@ class _MyAppState extends State<MyApp> {
       splitScreenMode: true,
     );
 
-    return MaterialApp(
-      navigatorKey: navigatorKey, // Set the navigatorKey
-      home: FutureBuilder<bool>(
-        future: Future.value(
-            widget.isAdmin ?? false), // Use the isAdmin value directly
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While checking admin status, show a loading indicator
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            // Use the null-aware operator to provide a default value
-            final isAdmin = widget.isAdmin ?? false;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TaskCubit>(
+          create: (context) => TaskCubit(taskRepo),
+        ),
+      ],
+      child: MaterialApp(
+        navigatorKey: navigatorKey, // Set the navigatorKey
+        home: FutureBuilder<bool>(
+          future: Future.value(
+              widget.isAdmin ?? false), // Use the isAdmin value directly
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // While checking admin status, show a loading indicator
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              // Use the null-aware operator to provide a default value
+              final isAdmin = widget.isAdmin ?? false;
 
-            // Return either MyPageView or LoginScreen based on the conditions
-            return ScreenUtilInit(
-              designSize: const Size(360, 690),
-              minTextAdapt: true,
-              splitScreenMode: true,
-              builder: (_, child) {
-                return MaterialApp(
-                  home: isAdmin ? const MyPageView() : const LoginScreen(),
-                );
-              },
-            );
-          }
-        },
+              // Return either MyPageView or LoginScreen based on the conditions
+              return ScreenUtilInit(
+                designSize: const Size(360, 690),
+                minTextAdapt: true,
+                splitScreenMode: true,
+                builder: (_, child) {
+                  return MaterialApp(
+                    home: isAdmin ? const MyPageView() : const LoginScreen(),
+                  );
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }

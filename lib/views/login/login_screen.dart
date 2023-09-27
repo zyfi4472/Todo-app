@@ -119,8 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
         String userId = user.uid;
 
         // Reference to the user's tasks sub-collection
-        final userDocRef =
-            FirebaseFirestore.instance.collection('users').doc(userId);
+        // final userDocRef =
+        //     FirebaseFirestore.instance.collection('users').doc(userId);
 
         // Sign-in was successful
         final isAdmin = await checkAdminStatus(userId);
@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => const MyPageView(),
-          ), //isAdmin: isAdmin
+          ),
         );
 
         sharedPrefGlobal.setBool(isLoggedInKey, true);

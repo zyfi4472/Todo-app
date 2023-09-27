@@ -30,7 +30,7 @@ class TaskData extends ChangeNotifier {
     );
 
     // Call the addTaskToFirestore method to store the task in Firestore
-    TaskRepository.addTaskToFirestore(task, userDocReference);
+    // TaskRepository.addTaskToFirestore(task, userDocReference);
     notifyListeners();
   }
 

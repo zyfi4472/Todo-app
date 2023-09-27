@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:todoey_app/cubit/task/cubit/task_cubit.dart';
 import 'package:todoey_app/globals.dart';
 import 'package:todoey_app/views/addTask/add_task_screen.dart';
 import '../../cubit/task_data.dart';
@@ -24,8 +26,8 @@ class _AppIndexScreenState extends State<AppIndexScreen> {
   void initState() {
     super.initState();
     // Call fetchAndSetTasks before displaying the screen
-    _initializeTaskData =
-        Provider.of<TaskData>(context, listen: false).fetchAndSetTasks();
+    _initializeTaskData = BlocProvider.of<TaskCubit>(context).fetchTasks();
+    // Provider.of<TaskData>(context, listen: false).fetchAndSetTasks();
   }
 
   @override

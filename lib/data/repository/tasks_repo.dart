@@ -3,7 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:todoey_app/data/model/task_model.dart';
 
-class TaskRepository {
+abstract class TaskRepo {
+  Future<List<TaskModel>?> fetchTasks();
+  Future<void> addTaskToFirestore(
+      TaskModel task, DocumentReference userReference);
+}
+
+class TaskRepository implements TaskRepo {
   Future<List<TaskModel>?> fetchTasks() async {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -41,7 +47,7 @@ class TaskRepository {
     return []; // Return an empty list if there are no tasks or an error occurs
   }
 
-  static Future<void> addTaskToFirestore(
+  Future<void> addTaskToFirestore(
       TaskModel task, DocumentReference userReference) async {
     try {
       // Fetch the user's existing tasks
